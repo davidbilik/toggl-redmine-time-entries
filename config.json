@@ -1,0 +1,9 @@
+{
+  "toggl_apikey": "xxx",
+  "workspace_id": "12345",
+  "date": "2018-12-11",
+  // optional, default today
+  "email": "david.bilik@ackee.cz",
+  "redmine_api_key": "xxx",
+  "redmine_base_url": "https://redmine.com"
+}
