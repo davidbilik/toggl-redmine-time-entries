@@ -1,6 +1,6 @@
 // model classes
 
-data class TimeEntry(val issueId: String, val timeMin: Long)
+data class TimeEntry(val issueId: String, val timeMin: Long, val date: String)
 
 data class AppConfig(
     val toggl_apikey: String,

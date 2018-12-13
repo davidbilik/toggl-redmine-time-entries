@@ -25,7 +25,13 @@ class RedmineTimeEntriesCreator(
                 client.post<Unit>(urlString = "${redmineUrl}${if (redmineUrl.endsWith("/")) "" else "/"}time_entries.json") {
                     header("X-Redmine-API-Key", apiKey)
                     contentType(ContentType.parse("application/json"))
-                    body = NewTimeEntryRequest(NewTimeEntry(entry.issueId, entry.timeMin / 60.0f))
+                    body = NewTimeEntryRequest(
+                        NewTimeEntry(
+                            entry.issueId,
+                            entry.timeMin / 60.0f,
+                            spent_on = entry.date
+                        )
+                    )
                 }
             } catch (e: BadResponseStatusException) {
                 println(e.response.readText())
@@ -38,7 +44,8 @@ class RedmineTimeEntriesCreator(
 private data class NewTimeEntry(
     val issue_id: String,
     val hours: Float,
-    val activity_id: String = "9"
+    val activity_id: String = "9",
+    val spent_on: String
 )
 
 private data class NewTimeEntryRequest(val time_entry: NewTimeEntry)

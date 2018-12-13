@@ -19,9 +19,8 @@ fun main(args: Array<String>) {
         )
         val redmineCreator = RedmineTimeEntriesCreator(
             apiKey = config.redmine_api_key,
-            redmineUrl = config.redmine_url
+            redmineUrl = config.redmine_base_url
         )
-
         redmineCreator.createNewEntries(togglFetcher.getEntries())
     }
 }

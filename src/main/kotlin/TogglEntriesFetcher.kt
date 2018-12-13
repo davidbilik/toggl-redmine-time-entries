@@ -4,6 +4,7 @@ import io.ktor.client.features.auth.basic.BasicAuth
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
+import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -13,9 +14,11 @@ import java.util.concurrent.TimeUnit
 class TogglEntriesFetcher(
     private val apiToken: String,
     private val email: String,
-    private val date: String?,
+    date: String?,
     private val workspaceId: String
 ) {
+
+    private val _date = date ?: SimpleDateFormat("YYYY-MM-DD", Locale.US).format(Date())
 
     suspend fun getEntries(): List<TimeEntry> {
         val client = HttpClient(Apache) {
@@ -28,8 +31,8 @@ class TogglEntriesFetcher(
         val response = client.get<TogglReportResponse>(urlString = "https://toggl.com/reports/api/v2/summary") {
             parameter("user_agent", email)
             parameter("workspace_id", workspaceId)
-            parameter("since", date)
-            parameter("until", date)
+            parameter("since", _date)
+            parameter("until", _date)
         }
         val entries = mutableListOf<TimeEntry>()
         response.data.forEach {
@@ -41,7 +44,7 @@ class TogglEntriesFetcher(
                     println("Add issue id for an entry '${it.title.time_entry}':")
                     Scanner(System.`in`).nextLine()
                 }
-                entries.add(TimeEntry(issueId, TimeUnit.MILLISECONDS.toMinutes(it.time)))
+                entries.add(TimeEntry(issueId, TimeUnit.MILLISECONDS.toMinutes(it.time), date = _date))
             }
         }
         return entries
