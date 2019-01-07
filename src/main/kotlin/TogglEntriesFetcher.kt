@@ -39,7 +39,7 @@ class TogglEntriesFetcher(
             it.items.forEach {
                 val matcher = "[#]{0,1}[0-9]+".toPattern().matcher(it.title.time_entry)
                 val issueId = if (matcher.find()) {
-                    matcher.group(0)
+                    matcher.group(0).replace("#", "")
                 } else {
                     println("Add issue id for an entry '${it.title.time_entry}':")
                     Scanner(System.`in`).nextLine()
