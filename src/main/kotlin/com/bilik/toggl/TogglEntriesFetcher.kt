@@ -30,11 +30,13 @@ class TogglEntriesFetcher(
                     println("Add issue id for an entry '$title':")
                     Scanner(System.`in`).nextLine()
                 }
+                val issueDescription = title.dropWhile { it == '#' || it.isDigit() }
                 TimeEntry(
                     items.map { it.id },
                     issueId,
                     items.fold(Duration.ZERO) { acc, toggleTimeEntry -> acc.plus(toggleTimeEntry.duration) },
-                    date = date
+                    date = date,
+                    description = issueDescription
                 )
             }.values
         }

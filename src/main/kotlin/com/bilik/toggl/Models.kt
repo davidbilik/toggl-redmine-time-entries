@@ -9,7 +9,8 @@ data class TimeEntry(
     val ids: List<String>,
     val issueId: String,
     val duration: Duration,
-    val date: LocalDate
+    val date: LocalDate,
+    val description: String
 )
 
 data class AppConfig(

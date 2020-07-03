@@ -39,7 +39,8 @@ class RedmineTimeEntriesCreator(
                     NewTimeEntry(
                         entry.issueId,
                         hours = entry.duration.toMinutes() / 60.0f,
-                        spent_on = entry.date.format(apiDateFormatter)
+                        spent_on = entry.date.format(apiDateFormatter),
+                        comments = entry.description
                     )
                 )
                 val call = httpClient.newCall(
@@ -69,7 +70,8 @@ private data class NewTimeEntry(
     val issue_id: String,
     val hours: Float,
     val activity_id: String = "9",
-    val spent_on: String
+    val spent_on: String,
+    val comments: String?
 )
 
 private data class NewTimeEntryRequest(val time_entry: NewTimeEntry)

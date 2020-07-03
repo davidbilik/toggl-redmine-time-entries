@@ -27,7 +27,7 @@ fun main(args: Array<String>) {
         val successfulEntries = redmineCreator.createNewEntries(entries)
         togglTagger.assignTag(successfulEntries)
         val totalTimeReported = successfulEntries.fold(Duration.ZERO) { acc, entry -> acc.plus(entry.duration) }
-        println("Reported: ${totalTimeReported.toHours()}h ${totalTimeReported.toMinutes()}m")
+        println("Reported: ${totalTimeReported.toHours()}h ${totalTimeReported.toMinutesPart()}m")
     }
 }
 
