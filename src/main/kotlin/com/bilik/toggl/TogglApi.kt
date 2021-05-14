@@ -52,7 +52,7 @@ class TogglApi(
             Request.Builder()
                 .get()
                 .url(
-                    "https://toggl.com/reports/api/v2/details".toHttpUrl().newBuilder()
+                    "https://api.track.toggl.com/reports/api/v2/details".toHttpUrl().newBuilder()
                         .addQueryParameter("user_agent", email)
                         .addQueryParameter("workspace_id", workspaceId)
                         .addQueryParameter("until", until.formatForApi())
@@ -74,7 +74,7 @@ class TogglApi(
     suspend fun createTag(request: NewTagRequest) {
         val call = httpClient.newCall(
             Request.Builder()
-                .url("https://www.toggl.com/api/v8/tags")
+                .url("https://api.track.toggl.com/api/v8/tags")
                 .post(gson.toJson(request).toRequestBody("application/json".toMediaType()))
                 .build()
         )
@@ -90,7 +90,7 @@ class TogglApi(
             val call = httpClient.newCall(
                 Request.Builder()
                     .url(
-                        "https://www.toggl.com/api/v8/time_entries/".toHttpUrl().newBuilder()
+                        "https://api.track.toggl.com/api/v8/time_entries/".toHttpUrl().newBuilder()
                             .addPathSegment(chunkedIds.joinToString(","))
                             .build()
                     )
