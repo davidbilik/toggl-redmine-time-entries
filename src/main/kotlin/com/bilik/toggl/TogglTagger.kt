@@ -10,12 +10,7 @@ class TogglTagger(
     private suspend fun ensureTagExists() {
         try {
             togglApi.createTag(
-                NewTagRequest(
-                    tag = NewTag(
-                        name = TAG_NAME,
-                        wid = togglApi.workspaceId
-                    )
-                )
+                NewTag(name = TAG_NAME)
             )
             println("Tag created")
         } catch (e: Exception) {

@@ -71,10 +71,10 @@ class TogglApi(
 
     private fun LocalDate.formatForApi() = format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
 
-    suspend fun createTag(request: NewTagRequest) {
+    suspend fun createTag(request: NewTag) {
         val call = httpClient.newCall(
             Request.Builder()
-                .url("https://api.track.toggl.com/api/v8/tags")
+                .url("https://api.track.toggl.com/api/v9/workspaces/${workspaceId}/tags")
                 .post(gson.toJson(request).toRequestBody("application/json".toMediaType()))
                 .build()
         )
@@ -85,16 +85,16 @@ class TogglApi(
     }
 
     suspend fun assignTagsToTimeEntries(tags: List<String>, ids: List<String>) {
-        val request = AssignTagRequest(TimeEntryTags(tags = tags))
-        ids.chunked(10).forEach { chunkedIds ->
+        val request = listOf(AssignTagRequest(value = tags))
+        ids.chunked(50).forEach { chunkedIds ->
             val call = httpClient.newCall(
                 Request.Builder()
                     .url(
-                        "https://api.track.toggl.com/api/v8/time_entries/".toHttpUrl().newBuilder()
+                        "https://api.track.toggl.com/api/v9/workspaces/$workspaceId/time_entries/".toHttpUrl().newBuilder()
                             .addPathSegment(chunkedIds.joinToString(","))
                             .build()
                     )
-                    .put(gson.toJson(request).toRequestBody("application/json".toMediaType()))
+                    .patch(gson.toJson(request).toRequestBody("application/json".toMediaType()))
                     .build()
             )
 
@@ -109,19 +109,14 @@ data class TimeEntryItem(
     val id: String, val description: String, val dur: Long, val start: String, val end: String
 )
 
-data class NewTagRequest(val tag: NewTag)
-
 data class NewTag(
-    val name: String,
-    val wid: String
+    val name: String
 )
 
 data class AssignTagRequest(
-    val time_entry: TimeEntryTags
-)
-
-data class TimeEntryTags(
-    val tags: List<String>
+    val op: String = "add",
+    val path: String = "/tags",
+    val value: List<String>
 )
 
 data class DetailedReportResponse(
